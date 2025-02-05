@@ -1,60 +1,58 @@
 "use strict";
 
-function createStudent(firstName, lastName, birthYear, grades = []) {
-    return {
-        firstName,
-        lastName,
-        birthYear,
-        grades,
-        attendance: new Array(25).fill(null),
-        currentAttendanceIndex: 0,
-
-        getAge() {
-            return new Date().getFullYear() - this.birthYear;
-        },
-
-        getAverageGrade() {
-            if (this.grades.length === 0) return 0;
-            return this.grades.reduce((sum, grade) => sum + grade, 0) / this.grades.length;
-        },
-
-        present() {
-            if (this.currentAttendanceIndex < this.attendance.length) {
-                this.attendance[this.currentAttendanceIndex++] = true;
-            }
-        },
-
-        absent() {
-            if (this.currentAttendanceIndex < this.attendance.length) {
-                this.attendance[this.currentAttendanceIndex++] = false;
-            }
-        },
-
-        getAttendanceRate() {
-            const attendedClasses = this.attendance.filter(value => value === true).length;
-            const totalMarkedClasses = this.attendance.filter(value => value !== null).length;
-            return totalMarkedClasses === 0 ? 0 : attendedClasses / totalMarkedClasses;
-        },
-
-        summary() {
-            const avgGrade = this.getAverageGrade();
-            const avgAttendance = this.getAttendanceRate();
-            
-            if (avgGrade > 90 && avgAttendance > 0.9) {
-                return "Молодець!";
-            } else if (avgGrade > 90 || avgAttendance > 0.9) {
-                return "Добре, але можна краще";
-            } else {
-                return "Редиска!";
-            }
-        }
-    };
+function Student(firstName, lastName, birthYear, grades = []) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.birthYear = birthYear;
+    this.grades = grades;
+    this.attendance = new Array(25).fill(null);
+    this.currentAttendanceIndex = 0;
 }
 
+Student.prototype.getAge = function() {
+    return new Date().getFullYear() - this.birthYear;
+};
+
+Student.prototype.getAverageGrade = function() {
+    if (this.grades.length === 0) return 0;
+    return this.grades.reduce((sum, grade) => sum + grade, 0) / this.grades.length;
+};
+
+Student.prototype.present = function() {
+    if (this.currentAttendanceIndex < this.attendance.length) {
+        this.attendance[this.currentAttendanceIndex++] = true;
+    }
+};
+
+Student.prototype.absent = function() {
+    if (this.currentAttendanceIndex < this.attendance.length) {
+        this.attendance[this.currentAttendanceIndex++] = false;
+    }
+};
+
+Student.prototype.getAttendanceRate = function() {
+    const attendedClasses = this.attendance.filter(value => value === true).length;
+    const totalMarkedClasses = this.attendance.filter(value => value !== null).length;
+    return totalMarkedClasses === 0 ? 0 : attendedClasses / totalMarkedClasses;
+};
+
+Student.prototype.summary = function() {
+    const avgGrade = this.getAverageGrade();
+    const avgAttendance = this.getAttendanceRate();
+    
+    if (avgGrade > 90 && avgAttendance > 0.9) {
+        return "Молодець!";
+    } else if (avgGrade > 90 || avgAttendance > 0.9) {
+        return "Добре, але можна краще";
+    } else {
+        return "Редиска!";
+    }
+};
+
 const students = [
-    createStudent("Віктор", "Кучеров", 2004, [94, 91, 90, 93]),
-    createStudent("Юлія", "Новікова", 2006, [77, 89, 88, 98]),
-    createStudent("Ольга", "Доброжан", 2005, [72, 74, 70, 80])
+    new Student("Віктор", "Кучеров", 2004, [94, 91, 90, 93]),
+    new Student("Юлія", "Новікова", 2006, [77, 89, 88, 98]),
+    new Student("Ольга", "Доброжан", 2005, [72, 74, 70, 80])
 ];
 
 function renderStudents() {
@@ -87,4 +85,3 @@ function markAbsent(index) {
 }
 
 renderStudents();
-
